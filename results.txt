@@ -1,0 +1,10 @@
+Mean for  Steel: 18846.9
+Mean for Graphite: 18581.4
+Maximum Steel: 21065
+Minimum Steel: 17563
+Maximum Graphite: 20100
+Minimum Graphite: 17324
+Steel variance: 1.41793e+06
+Steel standard deviation: 1190.77
+Graphite variance: 894686
+Graphite standard deviation: 945.878

@@ -1,0 +1,204 @@
+// Team Members: Sarah Villegas, Ali Fenton, Chanel Aquino
+// Date Created: 30 October 2015
+// Description: Evaluating Structural Strength
+// If you use a safety factor of three standard deviations the bridge will break since it will not be able to withstand the strain
+#include <iostream> // cin, cout
+#include <fstream>  // file IO
+#include <cmath>    // sqrt(), pow
+#include <iomanip>  // setw()
+#include <cstdlib>  // exit()
+using namespace std;
+
+
+void printArray(int ary[], int num);
+double mean(int ary[], int n);
+int maxValue(ofstream& sendfile, int ary[], int num); 
+int minValue(ofstream& sendfile, int ary[], int num);
+double variance(int ary[],double avg, int count);
+double standardDeviation(int var);
+
+
+//*********************************
+int main()
+{
+    const int SIZE = 20;
+    
+    int 
+        stl[SIZE] = {0},
+        gph[SIZE] = {0},
+        value,
+        steelAryCount = 0,
+        graphiteAryCount = 0;
+        
+   int 
+        maxSteel = 0, 
+        maxGph = 0, 
+        minSteel = 0, 
+        minGph = 0;
+    
+    double 
+        averageSteel,
+        averageGraphite,
+        varianceSteel,
+        varianceGraphite,
+        stdDevSteel,
+        stdDevGraphite;
+    
+    // create input/output files
+    ifstream fsteel, fgraphite;
+    ofstream fout;
+    
+    // open files
+    fsteel.open("data1.txt");
+    fgraphite.open("data2.txt");
+    fout.open("results.txt");
+    
+    // exit program if files do not exist
+    if (fsteel.fail() || fgraphite.fail() || fout.fail())
+    {
+        cout << "Error: Files do not exist.";
+        exit(1);
+    }
+    
+    // read data from file data1.txt to array stl[]
+    while (fsteel >> value)
+    {
+        stl[steelAryCount] = value; // input values into stl[] 
+        steelAryCount++;
+    }
+    
+    // read data from file data2.txt to array gph[]
+    while (fgraphite >> value)
+    {
+        gph[graphiteAryCount] = value;  // input values into gph[]
+        graphiteAryCount++;
+    }     
+    
+    // close files
+    fsteel.close();
+    fgraphite.close();
+    
+    
+    // call functions and print results to output file
+    
+    averageSteel =  mean(stl, steelAryCount);
+    
+    fout << "Mean for  Steel: " << averageSteel << endl;
+
+    averageGraphite = mean(gph, graphiteAryCount);
+   fout << "Mean for Graphite: " << averageGraphite << endl;
+
+
+    maxSteel = maxValue(fout, stl, steelAryCount); 
+    fout << "Maximum Steel: " << maxSteel << endl;
+
+    minSteel = minValue(fout, stl, steelAryCount); 
+    fout << "Minimum Steel: " << minSteel << endl;
+    
+    maxGph = maxValue(fout, gph, steelAryCount); 
+    fout << "Maximum Graphite: " << maxGph << endl;
+
+
+    minGph = minValue(fout, gph, graphiteAryCount); 
+    fout << "Minimum Graphite: " << minGph << endl;
+
+    varianceSteel = variance(stl, averageSteel, steelAryCount);
+    fout << "Steel variance: " << varianceSteel << endl;
+    
+    stdDevSteel = standardDeviation(varianceSteel);
+    fout << "Steel standard deviation: " << stdDevSteel << endl;
+    
+    varianceGraphite = variance(gph, averageGraphite, graphiteAryCount);
+    fout << "Graphite variance: " << varianceGraphite << endl;
+
+    stdDevGraphite = standardDeviation(varianceGraphite);
+    fout << "Graphite standard deviation: " << stdDevGraphite << endl;
+    
+    fout.close();
+    return 0;
+}
+
+//*********************************
+void printArray(int ary[], int num)
+{
+    for (int i = 0; i < num; i++)
+    {
+        cout << ary[i] << " " << endl;
+    }
+    
+}
+
+//*********************************
+double mean(int ary[], int n)
+{
+
+    double sum = 0, finalMean; 
+    for(int i = 0; i < n; i++){
+    
+        sum += ary[i]; 
+    }
+    
+    finalMean = sum / n;
+    
+    return finalMean; 
+}
+
+//*********************************
+int maxValue(ofstream& sendfile, int ary[], int num)
+{
+    int maxNum = 0;
+    for(int i = 0; i < num; i++){
+        if(ary[i] > maxNum){
+            maxNum = ary[i];
+        }
+    }
+    return maxNum;
+}
+
+//*********************************
+int minValue(ofstream& sendfile, int ary[], int num)
+{
+    int minNum = 50000;
+    for(int i = 0; i < num; i++){
+        if( minNum > ary[i]){
+            minNum = ary[i];
+        }
+    }
+    return  minNum;
+}
+
+//*******************************
+double variance(int ary[],double avg, int count)
+{
+    double sum = 0.0;
+    
+    for(int i = 0; i < count; i++)
+    {
+        sum += pow( (ary[i] - avg), 2);
+    }
+    
+    double var = sum / count;
+    
+    return var;
+}
+
+//*******************************
+double standardDeviation(int var)
+{
+    double stdDv = sqrt(var);
+    
+    return stdDv;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
